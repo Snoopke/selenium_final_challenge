@@ -1,12 +1,8 @@
-class BasePage():
-    def __init__(self, browser, url):
-        """Конструктор класса етод, который вызывается, когда мы создаем объект.
-         Конструктор объявляется ключевым словом __init__.
-        В него в качестве параметров мы передаем экземпляр драйвера и url адрес."""
-        self.browser = browser
-        self.url = url
+from .base_page import BasePage
+'''импортируем класс из base_page, чтобы main page унаследовал атрибуты'''
+from selenium.webdriver.common.by import By
 
-    def open(self):
-        """метод открывает нужную страницу, используя метод get() """
-
-        self.browser.get(self.url)
+class MainPage(BasePage):
+    def go_to_login_page(self):
+        login_link = self.browser.find_element(By.CSS_SELECTOR, "#login_link")
+        login_link.click()
