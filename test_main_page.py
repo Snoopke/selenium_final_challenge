@@ -1,4 +1,5 @@
 import pytest
+from .pages.basket_page import BasketPage
 
 from .pages.main_page import MainPage
 link = "http://selenium1py.pythonanywhere.com/"
@@ -17,6 +18,8 @@ class TestLoginFromMainPage():
 
     def test_guest_cant_see_product_in_basket_opened_from_main_page(self, browser):
         page = MainPage(browser, link)
+        page.open()
         page.go_to_basket_page()
-        page.s
-        page.is_element_present()
+        page = BasketPage(browser, link)
+        page.should_not_be_products_in_basket()
+        page.should_be_empty_basket_message()
