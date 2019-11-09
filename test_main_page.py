@@ -14,3 +14,9 @@ class TestLoginFromMainPage():
         page = MainPage(browser, link)
         page.open()
         page.should_be_login_link()
+
+    def test_guest_cant_see_product_in_basket_opened_from_main_page(self, browser):
+        page = MainPage(browser, link)
+        page.go_to_basket_page()
+        page.s
+        page.is_element_present()
