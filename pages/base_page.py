@@ -1,24 +1,26 @@
+import math
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, NoAlertPresentException
-import math
 from selenium.webdriver.support.wait import WebDriverWait
 from .locators import BasePageLocators
 
 
 class BasePage():
     def __init__(self, browser, url):
-        """Конструктор класса етод, который вызывается, когда мы создаем объект.
+        """Конструктор класса, который вызывается, когда мы создаем объект.
          Конструктор объявляется ключевым словом __init__.
         В него в качестве параметров мы передаем экземпляр драйвера и url адрес."""
         self.browser = browser
         self.url = url
 
     def go_to_login_page(self):
+        '''Переходит к странице логина'''
         login_link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
         login_link.click()
 
     def should_be_login_link(self):
-        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented" #Проверяю есть ли ссылка и если нет,перехватываю ошибку
+        '''Метод проверяет есть ли ссылка и если нет перехватывает ошибку'''
+        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
 
     def open(self):
         """метод открывает нужную страницу, используя метод get() """
@@ -33,6 +35,7 @@ class BasePage():
         return True
 
     def is_not_element_present(self, how, what, timeout=4):
+        '''Проверяет что, элемента нет на странице'''
         try:
             WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
         except TimeoutException:
@@ -40,6 +43,7 @@ class BasePage():
         return False
 
     def is_disappeared(self, how, what, timeout=4):
+        '''Проверяет, что элемент исчезает спустя timeout'''
         try:
             WebDriverWait(self.browser, timeout, 1, TimeoutException). \
                 until_not(EC.presence_of_element_located((how, what)))
@@ -48,6 +52,7 @@ class BasePage():
         return True
 
     def solve_quiz_and_get_code(self):
+        '''Решает математическую задачу на странице для получения кода'''
         alert = self.browser.switch_to.alert
         x = alert.text.split(" ")[2]
         answer = str(math.log(abs((12 * math.sin(float(x))))))
@@ -62,5 +67,11 @@ class BasePage():
             print("No second alert presented")
 
     def should_be_authorized_user(self):
+        '''Проверяет, что пользователь авторизован'''
         assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented," \
                                                                      " probably unauthorised user"
+
+    def go_to_basket_page(self):
+        '''Переходит на страницу корзины'''
+        basket_link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
+        basket_link.click()
